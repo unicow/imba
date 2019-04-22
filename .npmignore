@@ -1,0 +1,15 @@
+support
+test
+examples
+plugins
+publish.imba
+publish.js
+tmp
+.gitignore
+*.tgz
+*.log
+scripts/
+attic/*
+screenshot.png
+.gitattributes
+.editorconfig

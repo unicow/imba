@@ -1,0 +1,77 @@
+{
+  "name": "imba",
+  "description": "A rich language for the web",
+  "keywords": [
+    "javascript",
+    "language",
+    "imba",
+    "compiler"
+  ],
+  "author": "Sindre Aarsaether",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Sindre Aarsaether",
+      "email": "sindre@identu.no",
+      "url": "http://github.com/somebee/"
+    },
+    {
+      "name": "Magnus Holm",
+      "email": "judofyr@gmail.com",
+      "url": "http://github.com/judofyr/"
+    },
+    {
+      "name": "Slee Woo",
+      "url": "http://github.com/sleewoo/"
+    },
+    {
+      "name": "Luke Edwards",
+      "email": "luke@lukeed.com",
+      "url": "http://github.com/lukeed/"
+    },
+    {
+      "name": "Gavin Ray",
+      "url": "http://github.com/GavinRay97/"
+    }
+  ],
+  "scripts": {
+    "build-parser": "bin/imba scripts/build-parser.imba",
+    "build": "webpack --progress --colors --display-modules",
+    "build-watch": "webpack --progress --colors --display-modules --watch",
+    "watch": "bin/imbac -w --es5 -o lib/ src/",
+    "test": "bin/imba test/index.imba",
+    "test-webpack": "bin/imba test/webpack/test.imba",
+    "test-chrome": "bin/imba test/run-chrome.imba"
+  },
+  "bugs": "https://github.com/somebee/imba/issues",
+  "version": "1.4.3",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/somebee/imba/raw/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "directories": {},
+  "main": "./index",
+  "browser": "./imba",
+  "bin": {
+    "imba": "./bin/imba",
+    "imbac": "./bin/imbac",
+    "imbapack": "./bin/imbapack"
+  },
+  "preferGlobal": true,
+  "homepage": "http://imba.io",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/somebee/imba.git"
+  },
+  "devDependencies": {
+    "underscore": "^1.8.3",
+    "uglifyjs-webpack-plugin": "^1.0.0-rc.0",
+    "webpack": "^3.6.0"
+  },
+  "dependencies": {}
+}

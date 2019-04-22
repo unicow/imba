@@ -1,0 +1,12 @@
+.DS_Store
+.cache
+/node_modules
+tmp
+test/perf
+attic/*
+npm-debug.log
+dist/imba.edge.*
+/determinator.json
+test/webpack/js/**/*.js
+test/attic
+*.tmp.js
