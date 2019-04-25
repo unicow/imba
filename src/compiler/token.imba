@@ -51,7 +51,6 @@ export class Token
 		@loc == -1 ? ':' : "%${@loc}$%"
 		# @col == -1 ? '' : "%%{@line}${@col}%%"
 
-
 export def lex
 	var token = this:tokens[this:pos++]
 	var ttag
@@ -63,7 +62,6 @@ export def lex
 		ttag = ''
 
 	return ttag
-
 
 # export def token typ, val, line, col, len do Token.new(typ,val,line, col or 0, len or 0) # [null,typ,val,loc]
 export def token typ, val do Token.new(typ,val,-1,0)
@@ -77,7 +75,6 @@ export def setTyp tok, v do tok.@type = v
 export def setVal tok, v do tok.@value = v
 export def setLine tok, v do tok.@line = v
 export def setLoc tok, v do tok.@loc = v
-
 
 export var LBRACKET = Token.new('{','{',0,0,0)
 export var RBRACKET = Token.new('}','}',0,0,0)

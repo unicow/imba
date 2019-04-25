@@ -17,7 +17,6 @@ var rewriter = Rewriter.new
 parser:lexer = lex.jisonBridge
 parser:yy = ast # everything is exported right here now
 
-
 export def tokenize code, o = {}
 	try
 		# console.log('tokenize') if o:profile
@@ -42,7 +41,6 @@ export def rewrite tokens, o = {}
 	catch err
 		throw err
 	return tokens
-
 
 export def parse code, o = {}
 	var tokens = code isa Array ? code : tokenize(code,o)

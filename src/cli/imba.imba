@@ -1,11 +1,9 @@
 
 var helpers = require "../compiler/helpers"
 var imbac = require "../compiler/index"
-
 var path = require "path"
 var fs = require "fs"
 var package = require '../../package.json'
-
 var parseOpts =
 	alias: {h: 'help', v: 'version',e: 'eval'}
 	schema: {eval: {type: 'string'}}
@@ -64,6 +62,3 @@ export def run
 	o:target = 'node'
 	o:sourcePath = o:filename = src
 	imbac.run(body,o)
-
-	
-

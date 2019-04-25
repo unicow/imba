@@ -23,7 +23,6 @@ var TREE_TYPE =
 	SINGLE: 3
 	OPTLOOP: 4
 	LOOP: 5
-	
 
 # Helpers for operators
 export var OP = do |op, l, r|
@@ -214,7 +213,6 @@ def AST.escapeComments str
 	return '' unless str
 	return str
 
-
 var shortRefCache = []
 
 def AST.counterToShortRef nr
@@ -300,7 +298,6 @@ class Stash
 				@entities.splice(i,1)
 				return match
 		return null
-
 
 export class Stack
 
@@ -481,8 +478,6 @@ export class Stack
 
 # Lots of globals -- really need to deal with one stack per file / context
 export var STACK = Stack.new
-
-# use a bitmask for these
 
 export class Node
 
@@ -757,12 +752,10 @@ export class ValueNode < Node
 	def region
 		[@value.@loc,@value.@loc + @value.@len]
 
-
 export class Statement < ValueNode
 
 	def isExpressable
 		return no
-
 
 export class Meta < ValueNode
 
@@ -820,7 +813,6 @@ export class Newline < Terminator
 
 	def c
 		AST.c(@value)
-
 
 # weird place?
 export class Index < ValueNode
@@ -1006,7 +998,6 @@ export class ListNode < Node
 		@indentation ||= a and b ? Indentation.new(a,b) : INDENT
 		self
 
-
 export class ArgList < ListNode
 
 export class AssignList < ArgList
@@ -1019,7 +1010,6 @@ export class AssignList < ArgList
 		# need to store indented content as well?
 		# @nodes = nodes.concat(other isa Array ? other : other.nodes)
 		self
-
 
 export class Block < ListNode
 
@@ -1212,7 +1202,6 @@ export class Block < ListNode
 
 		yes
 
-
 # this is almost like the old VarDeclarations but without the values
 export class VarBlock < ListNode
 
@@ -1282,7 +1271,6 @@ export class VarBlock < ListNode
 		# it should probably return void for methods
 		return self
 
-
 # Could inherit from valueNode
 export class Parens < ValueNode
 
@@ -1342,7 +1330,6 @@ export class Parens < ValueNode
 	def consume node
 		@value.consume(node)
 
-
 # Could inherit from valueNode
 # an explicit expression-block (with parens) is somewhat different
 # can be used to return after an expression
@@ -1366,9 +1353,9 @@ export class ExpressionBlock < ListNode
 			push(expr)
 		self
 
-
-
-# STATEMENTS
+###
+	STATEMENTS
+###
 
 export class Return < Statement
 
@@ -1413,7 +1400,6 @@ export class Throw < Statement
 		# ROADMAP should possibly consume to the value of throw and then throw?
 		return self
 
-
 export class LoopFlowStatement < Statement
 
 	prop literal
@@ -1449,7 +1435,6 @@ export class LoopFlowStatement < Statement
 			super
 		# return "loopflow"
 
-
 export class BreakStatement < LoopFlowStatement
 	def js o do "break"
 
@@ -1458,8 +1443,9 @@ export class ContinueStatement < LoopFlowStatement
 
 export class DebuggerStatement < Statement
 
-
-# PARAMS
+###
+	PARAMS
+###
 
 export class Param < Node
 
@@ -1519,7 +1505,6 @@ export class Param < Node
 			defaults: defaults
 		}
 
-
 export class SplatParam < Param
 
 	def loc
@@ -1536,7 +1521,6 @@ export class BlockParam < Param
 		# hacky.. cannot know for sure that this is right?
 		var r = name.region
 		[r[0] - 1,r[1]]
-
 
 export class OptionalParam < Param
 
@@ -1580,7 +1564,6 @@ export class NamedParams < ListNode
 			nodes: filter(|v| v isa NamedParam)
 		}
 
-
 export class IndexedParam < Param
 
 	prop parent
@@ -1591,7 +1574,6 @@ export class IndexedParam < Param
 		self.variable ||= scope__.register(name,self)
 		self.variable.proxy(parent.variable,subindex)
 		self
-
 
 export class ArrayParams < ListNode
 
@@ -1842,7 +1824,6 @@ export class ParamList < ListNode
 		# if opt:length == 0
 		return ast:length > 0 ? (ast.join(";\n") + ";") : EMPTY
 
-
 # Legacy. Should move away from this?
 export class VariableDeclaration < ListNode
 
@@ -1924,7 +1905,6 @@ export class VariableDeclarator < Param
 	def accessor
 		self
 
-
 # TODO clean up and refactor all the different representations of vars
 # VarName, VarReference, LocalVarAccess?
 export class VarName < ValueNode
@@ -1949,7 +1929,6 @@ export class VarName < ValueNode
 
 	def c
 		variable.c
-
 
 export class VarList < Node
 
@@ -2009,8 +1988,11 @@ export class VarList < Node
 
 		return "var {pairs.c}"
 
+###
+	CODE
 
-# CODE
+	- Root is an entry point, probably should be renamed to program or main.
+###
 
 export class Code < Node
 
@@ -2027,8 +2009,6 @@ export class Code < Node
 		# @scope.parent = STACK.scope(1) if @scope
 		self
 
-
-# Rename to Program?
 export class Root < Code
 
 	def initialize body, opts
@@ -2295,7 +2275,6 @@ export class ModuleDeclaration < Code
 				
 		return js
 
-
 export class TagDeclaration < Code
 
 	prop name
@@ -2450,12 +2429,10 @@ export class Func < Code
 		par isa Call && par.callee == self
 		# if up as a call? Only if we are
 
-
 export class Lambda < Func
 	def scopetype
 		var k = option(:keyword)
 		(k and k.@value == 'ƒ') ? (MethodScope) : (LambdaScope)
-
 
 export class TagFragmentFunc < Func
 
@@ -2782,9 +2759,7 @@ export class MethodDeclaration < Func
 			
 		return out
 
-
 export class TagFragmentDeclaration < MethodDeclaration
-
 
 export class PropertyDeclaration < Node
 
@@ -2935,8 +2910,6 @@ export class PropertyDeclaration < Node
 		# if o.key(:v)
 		return out
 
-
-
 # Literals should probably not inherit from the same parent
 # as arrays, tuples, objects would be better off inheriting
 # from listnode.
@@ -2962,7 +2935,6 @@ export class Literal < ValueNode
 
 	def shouldParenthesizeInTernary
 		no
-
 
 export class Bool < Literal
 
@@ -3119,7 +3091,6 @@ export class Str < Literal
 	def c o
 		@cache ? super(o) : String(@value)
 
-
 export class Interpolation < ValueNode
 
 # Currently not used - it would be better to use this
@@ -3167,7 +3138,6 @@ export class InterpolatedString < Node
 		str += ')' unless @noparen
 		return str
 
-
 export class Tuple < ListNode
 
 	def c
@@ -3182,7 +3152,6 @@ export class Tuple < ListNode
 			return first.consume(node)
 		else
 			throw "multituple cannot consume"
-
 
 # Because we've dropped the Str-wrapper it is kinda difficult
 export class Symbol < Literal
@@ -3404,8 +3373,6 @@ export class ObjAttr < Node
 	def hasSideEffects
 		true
 
-
-
 export class ArgsReference < Node
 
 	# should register in this scope --
@@ -3448,10 +3415,9 @@ export class This < Self
 	def c
 		"this"
 
-
-
-
-# OPERATORS
+###
+	OPERATORS
+###
 
 export class Op < Node
 
@@ -3558,7 +3524,6 @@ export class ComparisonOp < Op
 		r = r.c if r isa Node
 		return "{l} {AST.mark(@opToken)}{op} {r}"
 
-
 export class MathOp < Op
 	# BUG if we have a statement in left or right we need
 	# to FORCE it into an expression, and register warning
@@ -3568,7 +3533,6 @@ export class MathOp < Op
 			return util.union(left,right).c
 		elif op == '∩'
 			return util.intersect(left,right).c
-
 
 export class UnaryOp < Op
 
@@ -3689,9 +3653,9 @@ export class In < Op
 		var idx = Util.indexOf(left,right)
 		"{idx.c} {cond}"
 
-
-
-# ACCESS
+###
+	ACCESS
+###
 
 export class Access < Op
 
@@ -3781,8 +3745,6 @@ export class Access < Op
 	def shouldParenthesizeInTernary
 		@parens or @cache
 
-
-# Should change this to just refer directly to the variable? Or VarReference
 export class LocalVarAccess < Access
 
 	prop safechain
@@ -3803,15 +3765,12 @@ export class LocalVarAccess < Access
 	def alias
 		variable.@alias or super()
 
-
 export class GlobalVarAccess < ValueNode
 
 	def js o
 		value.c
 
-
 export class ObjectAccess < Access
-
 
 export class PropertyAccess < Access
 
@@ -3863,7 +3822,6 @@ export class PropertyAccess < Access
 		else
 			null
 
-
 export class IvarAccess < Access
 
 	def visit
@@ -3875,9 +3833,7 @@ export class IvarAccess < Access
 		# WARN hmm, this is not right... when accessing on another object it will need to be cached
 		return self
 
-
 export class ConstAccess < Access
-
 
 export class IndexAccess < Access
 
@@ -3885,7 +3841,6 @@ export class IndexAccess < Access
 		return super if o:force
 		right.cache
 		self
-
 
 export class SuperAccess < Access
 
@@ -3905,7 +3860,6 @@ export class SuperAccess < Access
 
 	def receiver
 		SELF
-
 
 export class VarOrAccess < ValueNode
 
@@ -4030,23 +3984,6 @@ export class VarOrAccess < ValueNode
 	def toJSON
 		{type: typeName, value: @identifier.toString}
 
-#	def js
-#		if right isa Variable and right.type == 'meth'
-#			return "{right.c}()" unless up isa Call
-#
-#		right.c
-#
-#	def variable
-#		right
-#
-#	def cache o = {}
-#		super if o:force
-#		self
-#
-#	def alias
-#		variable.@alias or super # if resolved?
-#
-
 export class VarReference < ValueNode
 
 	# TODO VarBlock should convert these to plain / dumb nodes
@@ -4137,8 +4074,7 @@ export class VarReference < ValueNode
 	def addExpression expr
 		VarBlock.new([self]).addExpression(expr)
 
-
-# ASSIGN
+# ASSIGNMENT
 
 export class Assign < Op
 
@@ -4302,7 +4238,6 @@ export class Assign < Op
 		var node = typ.new([self])
 		return node.addExpression(expr)
 
-
 export class PushAssign < Assign
 	
 	prop consumed
@@ -4325,7 +4260,6 @@ export class TagPushAssign < PushAssign
 
 	def consume node
 		return self
-
 
 export class ConditionalAssign < Assign
 
@@ -4430,12 +4364,10 @@ export class CompoundAssign < Assign
 			up.replace(self,ast)
 		ast.c
 
-
 export class AsyncAssign < Assign
 
 	# this will transform the tree by a decent amount.
 	# Need to adjust Block to allow this
-
 
 export class TupleAssign < Assign
 
@@ -4735,9 +4667,9 @@ export class TupleAssign < Assign
 			@temporary.map do |temp| temp.decache
 		return out
 
-
-
-# IDENTIFIERS
+###
+	IDENTIFIERS
+###
 
 # really need to clean this up
 # Drop the token?
@@ -4830,7 +4762,6 @@ export class TagIdRef < Identifier
 	def c
 		"{scope__.imba.c}.getTagSingleton('{value.c.substr(1)}')"
 
-
 # This is not an identifier - it is really a string
 # Is this not a literal?
 
@@ -4869,10 +4800,7 @@ export class Decorator < ValueNode
 			# idx += 1 if block.index(idx) isa Terminator
 			# if var next = block.index(idx)
 			#	next.@desc = self
-		
-		
-
-
+			
 # Ambiguous - We need to be consistent about Const vs ConstAccess
 # Becomes more important when we implement typeinference and code-analysis
 export class Const < Identifier
@@ -4902,7 +4830,6 @@ export class Const < Identifier
 			"exports.{@value} = " + AST.mark(@value) + js
 		else
 			AST.mark(@value) + js
-
 
 export class TagTypeIdentifier < Identifier
 
@@ -4965,7 +4892,6 @@ export class TagTypeIdentifier < Identifier
 	def string
 		value
 
-
 export class Argvar < ValueNode
 
 	def c
@@ -4979,8 +4905,9 @@ export class Argvar < ValueNode
 		var par = s.params.at(v - 1,yes)
 		"{AST.c(par.name)}" # c
 
-
-# CALL
+###
+	CALLS
+###
 
 export class Call < Node
 
@@ -5128,9 +5055,6 @@ export class Call < Node
 
 		return out
 
-
-
-
 export class ImplicitCall < Call
 
 	def js o
@@ -5162,8 +5086,6 @@ export class SuperCall < Call
 		self.callee = "{m.target.c}.super$.prototype.{m.name.c}"
 		super
 
-
-
 export class ExternDeclaration < ListNode
 
 	def visit
@@ -5178,8 +5100,13 @@ export class ExternDeclaration < ListNode
 	def c
 		"// externs"
 
+###
+	FLOW
 
-# FLOW
+repeating myself.. don't deal with it until we move to compact tuple-args
+for all astnodes.
+
+###
 
 export class ControlFlow < Node
 
@@ -5190,8 +5117,6 @@ export class ControlFlowStatement < ControlFlow
 
 	def isExpressable
 		no
-
-
 
 export class If < ControlFlow
 
@@ -5387,8 +5312,6 @@ export class If < ControlFlow
 		var exp = (!body || body.isExpressable) && (!alt || alt.isExpressable)
 		return exp
 
-
-
 export class Loop < Statement
 
 
@@ -5448,8 +5371,6 @@ export class Loop < Statement
 			# scope.context.reference
 			return ast.c o
 			# need to wrap in function
-
-
 
 export class While < Loop
 
@@ -5523,10 +5444,6 @@ export class While < Loop
 			return [scope.vars.c,out]
 		out
 
-
-
-# This should define an open scope
-# should rather
 export class For < Loop
 
 	def initialize o = {}
@@ -5700,11 +5617,7 @@ export class For < Loop
 		var head = "{AST.mark(options:keyword)}for ({scope.vars.c}; {cond.c(expression: yes)}; {final.c(expression: yes)}) "
 		return head + code
 
-
-
 export class ForIn < For
-
-
 
 export class ForOf < For
 
@@ -5777,9 +5690,7 @@ export class ForOf < For
 			OP('=',v:value,OP('.',v:source,v:key)) if v:value
 		]
 
-# NO NEED?
 export class Begin < Block
-
 
 	def initialize body
 		@nodes = AST.blk(body).nodes
@@ -5787,8 +5698,6 @@ export class Begin < Block
 
 	def shouldParenthesize
 		isExpression
-
-
 
 export class Switch < ControlFlowStatement
 
@@ -5838,8 +5747,6 @@ export class Switch < ControlFlowStatement
 
 		"switch ({source.c}) " + helpers.bracketize(AST.cary(body).join("\n"),yes)
 
-
-
 export class SwitchCase < ControlFlowStatement
 
 
@@ -5871,8 +5778,6 @@ export class SwitchCase < ControlFlowStatement
 		@test = [@test] unless @test isa Array
 		var cases = @test.map do |item| "case {item.c}: "
 		cases.join("\n") + body.c(indent: yes, braces: yes)
-
-
 
 export class Try < ControlFlowStatement
 
@@ -5912,8 +5817,6 @@ export class Try < ControlFlowStatement
 		out += ";"
 		out
 
-
-
 export class Catch < ControlFlowStatement
 
 	prop body
@@ -5940,11 +5843,6 @@ export class Catch < ControlFlowStatement
 		# only indent if indented by default?
 		"catch ({@variable.c}) " + @body.c(braces: yes, indent: yes)
 
-
-# repeating myself.. don't deal with it until we move to compact tuple-args
-# for all astnodes
-
-
 export class Finally < ControlFlowStatement
 
 	def initialize body
@@ -5964,8 +5862,9 @@ export class Finally < ControlFlowStatement
 	def js o
 		"finally " + @body.c(braces: yes, indent: yes)
 
-
-# RANGE
+###
+	RANGE
+###
 
 export class Range < Op
 
@@ -5974,7 +5873,6 @@ export class Range < Op
 
 	def c
 		"range"
-
 
 export class Splat < ValueNode
 
@@ -5989,11 +5887,9 @@ export class Splat < ValueNode
 	def node
 		value
 
-
-
-
-
-# TAGS
+###
+	TAGS
+###
 
 var TAG_TYPES = {}
 var TAG_ATTRS = {}
@@ -6090,7 +5986,6 @@ export class TagCacheKey < Node
 		
 	def arg
 		@arg ||= OP('||',OP('.',@owner,@value),CALL(OP('.',@owner,'$'+@type),[]))
-
 
 export class TagPart < Node
 
@@ -6822,9 +6717,9 @@ export class TagWrapper < ValueNode
 	def c
 		"{scope__.imba.c}.getTagForDom({value.c(expression: yes)})"
 
-
-# SELECTORS
-
+###
+	SELECTORS
+###
 
 export class Selector < ListNode
 
@@ -6872,7 +6767,6 @@ export class Selector < ListNode
 
 		# return "{typ} {scoped} - {all}"
 
-
 export class SelectorPart < ValueNode
 
 	def c
@@ -6892,7 +6786,6 @@ export class SelectorType < SelectorPart
 		# can drop the tag for?
 		# out in TAG_TYPES.HTML ?
 		name in TAG_TYPES.HTML ? name : value.sel
-
 
 export class SelectorUniversal < SelectorPart
 
@@ -6942,10 +6835,9 @@ export class SelectorAttribute < SelectorPart
 
 			# ...
 
-
-
-
-# DEFER
+###
+	DEFER
+###
 
 export class Await < ValueNode
 
@@ -7030,11 +6922,11 @@ export class AsyncFunc < Func
 
 	def scopetype do LambdaScope
 
-
-# IMPORTS
+###
+	IMPORT
+###
 
 export class ImportStatement < Statement
-
 
 	prop ns
 	prop imports
@@ -7152,8 +7044,9 @@ export class ImportStatement < Statement
 	def consume node
 		return self
 
-
-# EXPORT
+###
+	EXPORT
+###
 
 export class ExportStatement < ValueNode
 
@@ -7230,7 +7123,6 @@ export class EnvFlag < ValueNode
 
 		else
 			"ENV_{@value}"
-
 
 # UTILS
 
@@ -7400,7 +7292,6 @@ export class Util.Len < Util
 		else
 			"{scope__.imba.c}.len({args.map(|v| v.c ).join(',')})"
 
-
 export class Util.Subclass < Util
 
 	def helper
@@ -7485,8 +7376,6 @@ export class Util.Array < Util
 		"new Array({args.map(|v| v.c)})"
 
 
-
-
 class Entities
 
 	def initialize root
@@ -7509,15 +7398,15 @@ class Entities
 	def toJSON
 		@map
 
-# SCOPES
+###
+	SCOPES
 
-# handles local variables, self etc. Should create references to outer scopes
-# when needed etc.
+handles local variables, self etc. Should create references to outer scopes when needed etc. 
+	- add class for annotations / registering methods, etc?
+	- class Interface
+	- should move the whole context-thingie right into scope
+###
 
-# add class for annotations / registering methods, etc?
-# class Interface
-
-# should move the whole context-thingie right into scope
 export class Scope
 
 	prop level
@@ -7770,7 +7659,6 @@ export class Scope
 	def closeScope
 		self
 
-
 # RootScope is wrong? Rather TopScope or ProgramScope
 export class RootScope < Scope
 
@@ -7950,7 +7838,6 @@ export class LambdaScope < Scope
 			@context = parent.context
 			@context.reference(self)
 		@context
-
 
 export class FlowScope < Scope
 
@@ -8208,7 +8095,6 @@ export class Variable < Node
 			refs: AST.dump(@references, typ)
 		}
 
-
 export class SystemVariable < Variable
 
 	def pool
@@ -8304,7 +8190,6 @@ export class SystemVariable < Variable
 	def name
 		resolve
 		@name
-
 
 export class ScopeContext < Node
 

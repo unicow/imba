@@ -145,6 +145,3 @@ export class SourceMap
 
 	def encodeBase64 value
 		BASE64_CHARS[value] # or throw Error.new("Cannot Base64 encode value: {value}")
-
-		
-		

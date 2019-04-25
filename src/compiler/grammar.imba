@@ -999,4 +999,3 @@ exports:parser = Parser.new
 	bnf: grammar
 	operators: operators.reverse
 	startSymbol: 'Root'
-

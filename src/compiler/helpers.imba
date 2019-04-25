@@ -63,12 +63,10 @@ export def normalizeIndentation str
 	str = str.replace(RegExp("\\n{ind}","g"), '\n') if ind
 	return str
 
-
 export def flatten arr
 	var out = []
 	arr.forEach do |v| v isa Array ? out:push.apply(out,flatten(v)) : out.push(v)
 	return out
-
 
 export def pascalCase str
 	str.replace(/(^|[\-\_\s])(\w)/g) do |m,v,l| l.toUpperCase
@@ -110,7 +108,6 @@ export def symbolize str
 			
 	return str
 
-
 export def indent str
 	String(str).replace(/^/g,"\t").replace(/\n/g,"\n\t").replace(/\n\t$/g,"\n")
 
@@ -140,8 +137,6 @@ export def unionOfLocations *locs
 			b = loc if b < loc
 
 	return [a,b]
-				
-
 
 export def locationToLineColMap code
 	var lines = code.split(/\n/g)
@@ -287,6 +282,3 @@ export def printWarning code, warn
 	let excerpt = printExcerpt(code,warn:loc, hl: 'whiteBright', type: 'warn', pad: 1)
 	return msg + '\n' + excerpt
 	
-
-
-
