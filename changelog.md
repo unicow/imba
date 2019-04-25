@@ -1,3 +1,13 @@
+## 1.4.3
+* Added ability to intercept tag's children and have them as `@children` prop.
+* Ability to specify a for property for all tags (useful for implementing named slot like behavior)
+* `dir` method, because why not?
+* `on`, `off` methods to quickly register an event handler on any tag/element.
+* `emit`, `once`, `listen`, `unlisten` to all tags for intera-tag communication.
+* `alert`, `storage` as built in methods for quickly accessing the `window.` equivalents of each,
+* `appendStyle(s)` to quicly attach a css style to the element's style attribute, an object can be used.
+* `hasActiveRoute` when used with `imba-router` will tell you if the current tag is inside or is an active route.
+
 ## 1.4.2
 * Respect empty parens in event handlers (`<div :tap.someMethod()>`)
 * Allow special variables in event handlers (`<div :tap.someMethod($event,$data)>`)
